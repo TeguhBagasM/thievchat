@@ -2,10 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+#app {
+    height: 100vh;
+}
+
 .conversation-item .avatar.online:before,
 .conversation-item .avatar.offline:before {
     width: 7px;
     height: 7px;
     top: 1%;
     right: 1%;
+    outline-width: 1px;
 }
