@@ -2,13 +2,22 @@ import ChatLayout from "@/Layouts/ChatLayout";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/solid";
 import { useEffect, useRef, useState } from "react";
+import ConversationHeader from "@/Components/App/ConversationHeader";
+import MessageItem from "@/Components/App/MessageItem";
 
-function Home({ messages }) {
+function Home({ selectedConversation = null, messages = null }) {
     const [localMessages, setLocalMessages] = useState([]);
     const messagesCtrRef = useRef(null);
 
     useEffect(() => {
-        setLocalMessages(messages);
+        setTimeout(() => {
+            messagesCtrRef.current.scrollTop =
+                messagesCtrRef.current.scrollHeight;
+        }, 10);
+    }, [selectedConversation]);
+
+    useEffect(() => {
+        setLocalMessages(messages ? messages.data.reverse() : []);
     }, [messages]);
     return (
         <>
@@ -30,7 +39,7 @@ function Home({ messages }) {
                         ref={messagesCtrRef}
                         className="flex-1 overflow-y-auto p-5"
                     >
-                        {localMessages.length > 0 && (
+                        {localMessages.length === 0 && (
                             <div className="flex justify-center items-center h-full">
                                 <div className="text-lg text-slate-200">
                                     No messages found
@@ -49,7 +58,7 @@ function Home({ messages }) {
                             </div>
                         )}
                     </div>
-                    <MessageInput conversation={selectedConversation} />
+                    {/* <MessageInput conversation={selectedConversation} /> */}
                 </>
             )}
         </>
