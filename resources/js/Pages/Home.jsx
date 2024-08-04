@@ -59,6 +59,7 @@ function Home({ selectedConversation = null, messages = null }) {
                 setScrollFromBottom(scrollHeight - scrollTop - clientHeight);
 
                 setLocalMessages((prevMessages) => {
+                    // ... = spread operator buat gabungin 2 array
                     return [...data.data.reverse(), ...prevMessages];
                 });
             });

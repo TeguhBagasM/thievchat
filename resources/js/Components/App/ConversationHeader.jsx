@@ -1,9 +1,16 @@
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
-import { Link, usePage } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 import UserAvatar from "./UserAvatar";
 import GroupAvatar from "./GroupAvatar";
 
 const ConversationHeader = ({ selectedConversation }) => {
+    // Pastikan selectedConversation dan selectedConversation.user ada
+    const userCount = selectedConversation.is_group
+        ? selectedConversation.user
+            ? selectedConversation.user.length
+            : 0
+        : null;
+
     return (
         <>
             {selectedConversation && (
@@ -24,7 +31,7 @@ const ConversationHeader = ({ selectedConversation }) => {
                             <h3>{selectedConversation.name}</h3>
                             {selectedConversation.is_group && (
                                 <p className="text-xs text-gray-500">
-                                    {selectedConversation.user.length} members
+                                    {userCount} members
                                 </p>
                             )}
                         </div>

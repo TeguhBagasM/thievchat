@@ -1,6 +1,6 @@
 export const formatMessageDateLong = (date) => {
     const now = new Date();
-    const inputDate = new Date();
+    const inputDate = new Date(date);
 
     if (isToday(inputDate)) {
         return inputDate.toLocaleTimeString([], {
