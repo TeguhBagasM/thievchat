@@ -74,6 +74,8 @@ function Home({ selectedConversation = null, messages = null }) {
 
         const offCreated = on("message.created", messageCreated);
 
+        setScrollFromBottom(0);
+        setNoMoreMessages(false);
         return () => {
             offCreated();
         };
@@ -84,6 +86,7 @@ function Home({ selectedConversation = null, messages = null }) {
     }, [messages]);
 
     useEffect(() => {
+        //recover scroll from bottom after messages are loaded
         if (messagesCtrRef.current && scrollFromBottom !== null) {
             messagesCtrRef.current.scrollTop =
                 messagesCtrRef.current.scrollHeight -
