@@ -4,6 +4,7 @@ import { formatMessageDateLong } from "@/helpers";
 import UserAvatar from "./UserAvatar";
 import React from "react";
 import MessageAttachments from "./MessageAttachments";
+import MessageOptionsDropdown from "./MessageOptionsDropdown";
 
 const MessageItem = ({ message, attachmentClick }) => {
     const currentUser = usePage().props.auth.user;
@@ -36,6 +37,9 @@ const MessageItem = ({ message, attachmentClick }) => {
                         : "")
                 }
             >
+                {message.sender_id === currentUser.id && (
+                    <MessageOptionsDropdown message={message} />
+                )}
                 <div className="chat-message">
                     <div className="chat-message-content">
                         <ReactMarkdown>{message.message}</ReactMarkdown>
