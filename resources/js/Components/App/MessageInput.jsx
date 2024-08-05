@@ -12,6 +12,9 @@ import NewMessageInput from "./NewMessageInput";
 import EmojiPicker from "emoji-picker-react";
 import { Popover } from "@headlessui/react";
 import axios from "axios";
+import AttachmentPreview from "./AttachmentPreview";
+import CustomAudioPlayer from "./CustomAudioPlayer";
+import { isAudio, isImage } from "@/helpers";
 
 const MessageInput = ({ conversation = null }) => {
     const [newMessage, setNewMessage] = useState("");
@@ -22,12 +25,14 @@ const MessageInput = ({ conversation = null }) => {
 
     const onFileChange = (ev) => {
         const files = ev.target.files;
+
         const updatedFiles = [...files].map((file) => {
             return {
                 file: file,
                 url: URL.createObjectURL(file),
             };
         });
+        ev.target.value = null;
 
         setChosenFiles((prevFiles) => {
             return [...prevFiles, ...updatedFiles];
@@ -38,14 +43,11 @@ const MessageInput = ({ conversation = null }) => {
         if (messageSending) {
             return;
         }
-        if (newMessage.trim() === "") {
+        if (newMessage.trim() === "" && chosenFiles.length === 0) {
             setInputErrorMessage(
                 "Please provide a message or upload attachments"
             );
-
-            setTimeout(() => {
-                setInputErrorMessage("");
-            }, 3000);
+            setTimeout(() => setInputErrorMessage(""), 3000);
             return;
         }
         const formData = new FormData();
@@ -67,7 +69,6 @@ const MessageInput = ({ conversation = null }) => {
                     const progress = Math.round(
                         (progressEvent.loaded / progressEvent.total) * 100
                     );
-
                     console.log(progress);
                     setUploadProgress(progress);
                 },
@@ -81,9 +82,8 @@ const MessageInput = ({ conversation = null }) => {
             .catch((error) => {
                 setMessageSending(false);
                 setChosenFiles([]);
-                const message = error?.response?.data?.message(
-                    message || "An error occurred while sending the message"
-                );
+                const message = error?.response?.data?.message;
+                setInputErrorMessage(message || "Something went wrong");
             });
     };
 
@@ -145,10 +145,9 @@ const MessageInput = ({ conversation = null }) => {
                             <span className="loading loading-spinner loading-xs"></span>
                         )}
                         <PaperAirplaneIcon className="w-6" />
-                        {/* <span className="hidden sm:inline">Send</span> */}
                     </button>
                 </div>{" "}
-                {!uploadProgress && (
+                {!!uploadProgress && (
                     <progress
                         className="progress progress-info w-full"
                         value={uploadProgress}
@@ -180,7 +179,7 @@ const MessageInput = ({ conversation = null }) => {
                                     showVolume={false}
                                 />
                             )}
-                            {isAudio(file.file) && isImage(file.file) && (
+                            {!isAudio(file.file) && !isImage(file.file) && (
                                 <AttachmentPreview file={file} />
                             )}
 
