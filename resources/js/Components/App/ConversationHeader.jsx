@@ -4,13 +4,6 @@ import UserAvatar from "./UserAvatar";
 import GroupAvatar from "./GroupAvatar";
 
 const ConversationHeader = ({ selectedConversation }) => {
-    // Pastikan selectedConversation dan selectedConversation.user ada
-    const userCount = selectedConversation.is_group
-        ? selectedConversation.user
-            ? selectedConversation.user.length
-            : 0
-        : null;
-
     return (
         <>
             {selectedConversation && (
@@ -31,7 +24,7 @@ const ConversationHeader = ({ selectedConversation }) => {
                             <h3>{selectedConversation.name}</h3>
                             {selectedConversation.is_group && (
                                 <p className="text-xs text-gray-500">
-                                    {userCount} members
+                                    {selectedConversation.users.length} members
                                 </p>
                             )}
                         </div>
