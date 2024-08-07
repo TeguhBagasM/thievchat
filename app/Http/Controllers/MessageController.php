@@ -120,3 +120,34 @@ class MessageController extends Controller
         return response()->json('', 204);
     }
 }
+
+// error
+// public function destroy(Message $message)
+//     {
+//         if ($message->sender_id !== auth()->id()) {
+//             return response()->json(['message' => 'You can only delete your own messages.'], 403);
+//         }
+
+//         $group = null;
+//         $conversation = null; 
+
+//         //Check if the message is group message
+//         if ($message->group_id) {
+//             $group = Group::where('last_message_id', $message->id)->first();
+//         } else {
+//             $conversation = Conversation::where('last_message_id', $message->id)->first();
+//         }
+//         $message->delete();
+//         dd($conversation, $group);
+
+//         if ($group) {
+//             //Repopulate $group with latest database data
+//             $group = Group::find($group->id);
+//             $lastMessage = $group->lastMessage;
+//         } elseif ($conversation) {
+//             $conversation = Conversation::find($conversation->id);
+//             $lastMessage = $conversation->lastMessage;
+//         } 
+
+//         return response()->json(['message', $lastMessage ? new MessageResource($lastMessage) : null]);
+//     }
