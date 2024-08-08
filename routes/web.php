@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,6 +16,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/message', [MessageController::class, 'store'])->name('message.store');
     Route::delete('/message/{message}', [MessageController::class, 'destroy'])->name('message.destroy');
     Route::get('/message/older/{message}', [MessageController::class, 'loadOlder'])->name('message.loadOlder');
+
+
+    Route::middleware(['admin'])->group(function () {
+        Route::post('/user', [UserController::class, 'store'])->name('user.store');
+        Route::post('/user/change-role/{user}', [UserController::class, 'changeRole'])->name('user.changeRole');
+        Route::post('/user/block-unblock/{user}', [UserController::class, 'blockUnblock'])->name('user.blockUnblock');
+    });
 });
 
 Route::middleware('auth')->group(function () {

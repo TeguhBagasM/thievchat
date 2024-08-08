@@ -6,6 +6,9 @@ import { usePage } from "@inertiajs/react";
 import { useEventBus } from "@/EventBus";
 import Toast from "@/Components/App/Toast";
 import NewMessageNotification from "@/Components/App/NewMessageNotification";
+import PrimaryButton from "@/Components/PrimaryButton";
+import { UserPlusIcon } from "@heroicons/react/24/solid";
+import NewUserModal from "@/Components/App/NewUserModal";
 // import Echo from "laravel-echo";
 
 export default function Authenticated({ header, children }) {
@@ -14,6 +17,7 @@ export default function Authenticated({ header, children }) {
     const conversations = page.props.conversations;
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+    const [showNewUserModal, setShowNewUserModal] = useState(false);
 
     const { emit } = useEventBus();
 
@@ -96,7 +100,17 @@ export default function Authenticated({ header, children }) {
                             </div>
 
                             <div className="hidden sm:flex sm:items-center sm:ms-6">
-                                <div className="ms-3 relative">
+                                <div className="flex ms-3 relative">
+                                    {user.is_admin && (
+                                        <PrimaryButton
+                                            onClick={(ev) =>
+                                                setShowNewUserModal(true)
+                                            }
+                                        >
+                                            <UserPlusIcon className="w-5 h-5 mr-2" />
+                                            Add new user
+                                        </PrimaryButton>
+                                    )}
                                     <Dropdown>
                                         <Dropdown.Trigger>
                                             <span className="inline-flex rounded-md">
@@ -236,6 +250,10 @@ export default function Authenticated({ header, children }) {
             </div>
             <Toast />
             <NewMessageNotification />
+            <NewUserModal
+                show={showNewUserModal}
+                onClose={(ev) => setShowNewUserModal(false)}
+            />
         </>
     );
 }
