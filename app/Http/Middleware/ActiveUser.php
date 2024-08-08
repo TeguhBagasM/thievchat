@@ -15,6 +15,12 @@ class ActiveUser
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (auth()->user()->blocked_at) {
+            auth()->logout();
+            return redirect()
+                ->route('login')
+                ->with('errorMessage', 'Your account has been blocked.');
+        }
         return $next($request);
     }
 }
