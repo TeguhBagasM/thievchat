@@ -17,7 +17,20 @@ use Illuminate\Support\Str;
 
 class MessageController extends Controller
 {
-    
+    public function byUser(User $user)
+    {
+        $messages = Message::where('sender_id', auth()->id())
+            ->where('receiver_id', $user->id)
+            ->orWhere('sender_id', $user->id)
+            ->where('receiver_id', auth()->id())
+            ->latest()
+            ->paginate(10);
+
+        return Inertia('Home', [
+            'selectedConversation' => $user->toConversationArray(),
+            'messages' => MessageResource::collection($messages),
+        ]);
+    }
 
     public function byGroup(Group $group)
     {
